@@ -4,7 +4,8 @@ RandomNumberGenerator* RandomNumberGenerator::instance = nullptr;
 
 RandomNumberGenerator* RandomNumberGenerator::getInstance() 
 {
-	if (instance == nullptr) {
+	if (instance == nullptr) 
+	{
 		instance = new RandomNumberGenerator();
 		instance->init();
 	}
