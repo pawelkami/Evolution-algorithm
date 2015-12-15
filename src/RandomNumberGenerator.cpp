@@ -1,14 +1,8 @@
 #include "RandomNumberGenerator.h"
 
-RandomNumberGenerator* RandomNumberGenerator::instance = nullptr;
-
-RandomNumberGenerator* RandomNumberGenerator::getInstance() 
+RandomNumberGenerator& RandomNumberGenerator::getInstance() 
 {
-	if (instance == nullptr) 
-	{
-		instance = new RandomNumberGenerator();
-		instance->init();
-	}
+	static RandomNumberGenerator instance;
 	return instance;
 }
 

@@ -3,3 +3,8 @@
 *.exe
 *.o
 *.obj
+*.sdf
+*.opensdf
+./Debug
+./Release
+*.pyd

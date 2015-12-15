@@ -5,6 +5,7 @@ from ttk import *
 from numpy import *
 import Tkinter as tk
 from matplotlib.pyplot import *
+import evolution
 
 # class representing main window in application
 class MainWindow(tk.Frame):
@@ -56,6 +57,7 @@ class MainWindow(tk.Frame):
 
     # function which solves problem with evolutionary algorithm
     def solve(self):
+        print evolution.getName()
         #drawing plot
         self.drawPlot(11,2)
 

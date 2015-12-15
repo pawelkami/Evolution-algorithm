@@ -7,7 +7,7 @@
 class RandomNumberGenerator 
 {
 public:
-	static RandomNumberGenerator* getInstance();
+	static RandomNumberGenerator& getInstance();
 	void init();
 	double getFromUniformDistribution();
 	double getFromNormalDistribution();

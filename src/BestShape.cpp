@@ -42,10 +42,10 @@ void BestShape::pickBestCharacters()
 
 bool BestShape::stopCondition()
 {
-
+	return true;
 }
 
 double BestShape::adaptFunction(double a0, double a1)
 {
-
+	return 0.0;
 }
