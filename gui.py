@@ -14,11 +14,11 @@ class MainWindow(tk.Frame):
         self.parent = parent
         self.x0 = tk.StringVar(self)
         self.x1 = tk.StringVar(self)
+        self.x2 = tk.StringVar(self)
+		
         self.y0 = tk.StringVar(self)
         self.y1 = tk.StringVar(self)
-        # viscosity
-        self.viscosity = tk.DoubleVar(self)
-        self.friction = tk.DoubleVar()
+        self.y2 = tk.StringVar(self)
 
         self.initUI()
 
@@ -30,27 +30,27 @@ class MainWindow(tk.Frame):
         self.pack(fill=tk.BOTH, expand=1)
 
         # Spinboxes for coordinates
-        Label(self, text="Współrzędne:").pack(anchor=tk.NW, padx=10, pady=10)
-
-        self.makeSpinbox("x0", 20, increment=0.1, textvariable=self.x0, from_=0, to=100000000)
-        self.makeSpinbox("y0", 20, increment=0.1, textvariable=self.y0, from_=0, to=100000000)
-        self.makeSpinbox("x1", 20, increment=0.1, textvariable=self.x1, from_=0, to=100000000)
-        self.makeSpinbox("y1", 20, increment=0.1, textvariable=self.y1, from_=0, to=100000000)
-        self.makeSpinbox("Współczynnik lepkości", 20, increment=0.01, textvariable=self.viscosity, from_=0, to=1 )
-        self.x0.set(0.0)
-        self.x1.set(0.0)
-        self.y0.set(0.0)
-        self.y1.set(0.0)
-        self.viscosity.set(0.0)
-
-        # friction scale
-        scale = tk.Scale(self, from_=0.0, to=1.0, resolution=0.001, command=self.onScale,
-            label="Współczynnik tarcia", orient=tk.HORIZONTAL, length=150)
-        scale.pack(anchor=tk.NW, padx=20, pady=10)
+        Label(self, text="Ruchy pierwszego gracza:").place(x=10,y=10)
+        Label(self, text="Ruchy drugiego gracza:").place(x=200, y=10)
+		
+        self.makeSpinbox("Pierwszy:", 10, 10, 30, increment=1, textvariable=self.x0, values=(0,1))
+        self.makeSpinbox("Pierwszy:", 10, 200, 30, increment=1, textvariable=self.y0, values=(0,1))
+        self.makeSpinbox("Drugi:", 10, 10, 90, increment=1, textvariable=self.x1, values=(0,1))
+        self.makeSpinbox("Drugi:", 10, 200, 90, increment=1, textvariable=self.y1, values=(0,1))
+        self.makeSpinbox("Trzeci:", 10, 10, 150, increment=1, textvariable=self.x2, values=(0,1))
+        self.makeSpinbox("Trzeci:", 10, 200, 150, increment=1, textvariable=self.y2, values=(0,1))
+        Label(self, text="0 - brak współpracy").place(x=10,y=200)
+        Label(self, text="1 - współpraca").place(x=10, y=220)
+        self.x0.set(0)
+        self.x1.set(0)
+        self.x2.set(0)
+        self.y0.set(0)
+        self.y1.set(0)
+        self.y2.set(0)
 
         # solve button
-        button = tk.Button(self, text ="Oblicz", command = self.solve).pack(anchor=tk.S, padx=20, pady=15)
-        buttonClose = tk.Button(self, text ="Zamknij", command = self.closeWindow).pack(anchor=tk.S, padx=20, pady=15)
+        button = tk.Button(self, text ="Oblicz", command = self.solve).place(x=110, y= 260)
+        buttonClose = tk.Button(self, text ="Zamknij", command = self.closeWindow).place(x=170, y=260)
 
     def closeWindow(self):
         self.parent.destroy()
@@ -67,12 +67,16 @@ class MainWindow(tk.Frame):
         self.friction.set(v)
 
     # method which creates spinbox
-    def makeSpinbox(parent, caption, width=None, **options):
-        Label(parent, text=caption).pack(anchor=tk.N, padx=10, pady=10)
+    def makeSpinbox(parent, caption, width, x, y, **options):
+        #Label(parent, text=caption).pack('''anchor=tk.NW, padx=10, pady=10''')
+        Label(parent, text=caption).place(x=x,y=y)
+        Label(parent, text=caption).place(x=x,y=y)
+
         spinbox = tk.Spinbox(parent, **options)
         if width:
             spinbox.config(width=width)
-        spinbox.pack(anchor=tk.S, padx=10, pady=10)
+        #spinbox.pack(anchor=tk.S, side=side,padx=10, pady=10)
+        spinbox.place(x=x, y=y+20)
         return spinbox
 
     # function which draws plot of the shape of tool
@@ -101,7 +105,8 @@ class MainWindow(tk.Frame):
 def main():
     root = tk.Tk()
     mw = MainWindow(root)
-    root.geometry("200x580")
+    root.geometry("340x300")
+    root.resizable(width=tk.FALSE, height=tk.FALSE)
     root.mainloop()
 
 if __name__ == '__main__':
