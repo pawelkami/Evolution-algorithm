@@ -1,16 +1,15 @@
-#ifndef BESTSTRATEGY_H
-#define BESTSTRATEGY_H
+#ifndef POPULATION_H
+#define POPULATION_H
 
 #include "RandomNumberGenerator.h"
-#include "Strategy.h"
+#include "Gamer.h"
 #include <iostream>
 #include <vector>
 
-class BestStrategy
+class Population
 {
 public:
-	BestStrategy(std::bitset<6> history);
-	Strategy geneticAlgorithm();
+	Population(std::bitset<6> history);
 private:
 	void initialize();
 	bool stopCondition();
@@ -18,10 +17,9 @@ private:
 	void mutate();
 	void compete();
 
-
 	std::bitset<6> history;		// historia wprowadzana przez uzytkownika
-	std::vector<Strategy> population;
-	std::vector<Strategy> parents;
+	std::vector<Gamer> population;
+	std::vector<Gamer> parents;
 	double ratioMutate;
 	double ratioCrossing;
 };

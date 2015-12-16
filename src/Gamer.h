@@ -1,12 +1,13 @@
-#ifndef STRATEGY_H
-#define STRATEGY_H
+#ifndef GAMER_H
+#define GAMER_H
 
 #include "RandomNumberGenerator.h"
 
-class Strategy
+class Gamer
 {
 public:
-	Strategy();
+	Gamer();
+	void mutate();
 private:
 	std::bitset<64> choices;
 };
