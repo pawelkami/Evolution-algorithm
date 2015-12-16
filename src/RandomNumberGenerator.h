@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <time.h>
+#include <bitset>
+#include <random>
 
 class RandomNumberGenerator 
 {
@@ -11,6 +13,13 @@ public:
 	void init();
 	double getFromUniformDistribution();
 	double getFromNormalDistribution();
+	static unsigned long rand64();
+	static unsigned long rand63plus1();
+	static unsigned long randBit();
+	static unsigned long randBinN(unsigned int n, double p);
+	static unsigned long randn(unsigned int n);
+	static std::bitset<64> randBitset64();
+	static std::bitset<6> randBitset6();
 private:
 	double a, b, c;
 	static RandomNumberGenerator* instance;

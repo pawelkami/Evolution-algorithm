@@ -61,3 +61,59 @@ double RandomNumberGenerator::getFromNormalDistribution()
 
 	return X;
 }
+
+unsigned long RandomNumberGenerator::rand64()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<> dis(0, 63);
+	return dis(gen);
+}
+
+unsigned long RandomNumberGenerator::rand63plus1()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<> dis(1, 63);
+	return dis(gen);
+}
+
+unsigned long RandomNumberGenerator::randBit()
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<> dis(0, 1);
+	return dis(gen);
+}
+
+unsigned long RandomNumberGenerator::randBinN(unsigned int n, double p)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::binomial_distribution<> dis(n, p);
+	return dis(gen);
+}
+
+unsigned long RandomNumberGenerator::randn(unsigned int n)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(0, n - 1);
+	return dis(gen);
+}
+
+std::bitset<64> RandomNumberGenerator::randBitset64()
+{
+	std::bitset<64> bits = 0;
+	for (auto i = 0; i < 64; ++i)
+		bits[i] = randBit();
+	return std::move(bits);
+}
+
+std::bitset<6> RandomNumberGenerator::randBitset6()
+{
+	std::bitset<6> bits = 0;
+	for (auto i = 0; i < 6; ++i)
+		bits[i] = randBit();
+	return std::move(bits);
+}
