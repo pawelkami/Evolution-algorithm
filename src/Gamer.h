@@ -15,11 +15,12 @@ public:
 	void resetBit(int i);
 	void display();
 	void displayFitness();
-	void compete(Gamer opponent, unsigned long hist);
+	void compete(Gamer opponent);
 	void normalizeFitness(int opponentsNumber);
+	double getNormalFitness();
 	bool betterThan(Gamer compare);
 	Gamer& operator =(const Gamer& g);
-	bool operator < (const Gamer& compare) const;
+	bool operator <(const Gamer& compare) const;
 private:
 	std::bitset<64> choices;
 	int fitness;

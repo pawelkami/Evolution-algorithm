@@ -63,27 +63,28 @@ void Gamer::resetBit(int i)
 	10 - player 1 gets 5 points, player 2 gets 0 points
 	11 - both players get 1 point
 */
-void Gamer::compete(Gamer opponent, unsigned long hist)
+void Gamer::compete(Gamer opponent)
 {
-	int points;
-	
-	int code = ((this->choices[hist] << 1) + (opponent.choices[hist]));
-
-	switch (code)
+	for (int i = 0; i < 64; ++i)
 	{
-	case 0:
-		this->fitness += 3;
-		opponent.fitness += 3;
-		break;
-	case 1:
-		opponent.fitness += 5;
-		break;
-	case 2:
-		this->fitness += 5;
-		break;
-	case 3:
-		this->fitness += 1;
-		opponent.fitness += 1;
+		int code = ((this->choices[i] << 1) + (opponent.choices[i]));
+
+		switch (code)
+		{
+		case 0:
+			this->fitness += 3;
+			opponent.fitness += 3;
+			break;
+		case 1:
+			opponent.fitness += 5;
+			break;
+		case 2:
+			this->fitness += 5;
+			break;
+		case 3:
+			this->fitness += 1;
+			opponent.fitness += 1;
+		}
 	}
 }
 /*
@@ -94,6 +95,14 @@ void Gamer::normalizeFitness(int opponentsNumber)
 	int max = 5 * (opponentsNumber - 1) * 64;
 
 	normalizedFitness = fitness / max;
+}
+
+/*
+	Metoda zwraca wartosc pola normalizedFitness
+*/
+double Gamer::getNormalFitness()
+{
+	return normalizedFitness;
 }
 
 /*
@@ -108,12 +117,16 @@ Gamer& Gamer::operator =(const Gamer& g)
 {
 	this->choices = g.choices;
 	this->fitness = g.fitness;
+	this->normalizedFitness = g.normalizedFitness;
 	return *this;
 }
 
+/*
+	Operator porzadku dla funkcji sort
+*/
 bool Gamer::operator <(const Gamer& compare) const
 {
-	return(this->fitness < compare.fitness);
+	return(this->normalizedFitness > compare.normalizedFitness);
 }
 
 // pomocnicze metody
