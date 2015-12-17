@@ -60,16 +60,20 @@ class MainWindow(tk.Frame):
         print evolution.getName()
         history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
         pd = evolution.PrisonersDilemma(history)
+        self.beginWaitCursor()
         res = pd.solve()
+        self.endWaitCursor()
         print res
         #drawing plot
         #self.drawPlot(11,2)
 
-    # method which sets scale value to friction
-    def onScale(self, val):
-        v = float(val)
-        self.friction.set(v)
+    def beginWaitCursor(self):
+        self.parent.config(cursor="wait")
+        self.parent.update()
 
+    def endWaitCursor(self):
+        self.parent.config(cursor="")
+        self.parent.update()
     # method which creates spinbox
     def makeSpinbox(parent, caption, width, x, y, **options):
         Label(parent, text=caption).place(x=x,y=y)

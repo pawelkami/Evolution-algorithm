@@ -1,10 +1,17 @@
 #include "PrisonersDilemma.h"
+#include <assert.h>
 
 PrisonersDilemma::PrisonersDilemma()
 	: history(RandomNumberGenerator::getInstance().randBitset6()), parentsNumber(PARNUM), 
 	populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), 
 	iterationNumber(ITERNUM), actualIteration(0)
 {
+	initialize();
+}
+
+PrisonersDilemma::PrisonersDilemma(std::string hist)
+{
+	setHistoryFromString(hist);
 	initialize();
 }
 
@@ -89,6 +96,18 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 	std::cout << best.getNormalFitness() << std::endl;
 
 	return best;
+}
+
+void PrisonersDilemma::setHistoryFromString(const std::string & hist)
+{
+	assert(hist.size() == 6);
+	for (unsigned int i = 0; i < hist.size(); ++i)
+	{
+		if (hist[i] == '1')
+			history.set(i);
+		else if (hist[i] == '0')
+			history.reset(i);
+	}
 }
 
 /*
