@@ -4,8 +4,12 @@ Gamer::Gamer()
 {
 	choices = RandomNumberGenerator::getInstance().randBitset64();
 	fitness = 0;
+	normalizedFitness = 0.0;
 }
 
+/*
+	Metoda mutuje pojedyncze bity danej strategii z podanym wspolczynnikiem/prawdopodobienstwem
+*/
 void Gamer::mutate(double ratio)
 {
 	for (int i = 0; i < choices.size(); ++i)
@@ -17,27 +21,41 @@ void Gamer::mutate(double ratio)
 	}
 }
 
+/*
+	Metoda zwraca strategie przekonwertowana do string'a
+*/
 std::string Gamer::toString()
 {
 	return choices.to_string();
 }
 
+/*
+	Metoda zwraca wartosc bita o podanym numerze
+*/
 int Gamer::getBit(int i)
 {
 	return choices[i];
 }
 
+/*
+	Metoda ustawia wartosc bita o podanym numerze na 1
+*/
 void Gamer::setBit(int i)
 {
 	choices.set(i);
 }
 
+/*
+	Metoda ustawia wartosc bita o podanym numerze na 0
+*/
 void Gamer::resetBit(int i)
 {
 	choices.reset(i);
 }
 
 /*
+	Metoda porownuje dwie strategie dla danej historii zgodnie z ponizsza tabelka wynikow
+
 	0 - cooperate, 1 - defect
 
 	00 - both players get 3 point
@@ -45,7 +63,6 @@ void Gamer::resetBit(int i)
 	10 - player 1 gets 5 points, player 2 gets 0 points
 	11 - both players get 1 point
 */
-
 void Gamer::compete(Gamer opponent, unsigned long hist)
 {
 	int points;
@@ -69,7 +86,19 @@ void Gamer::compete(Gamer opponent, unsigned long hist)
 		opponent.fitness += 1;
 	}
 }
+/*
+	Metoda ma na celu znormalizowanie fitnessa dla pojedynczej strategii
+*/
+void Gamer::normalizeFitness(int opponentsNumber)
+{
+	int max = 5 * (opponentsNumber - 1) * 64;
 
+	normalizedFitness = fitness / max;
+}
+
+/*
+	Metoda porownuje dwie strategie na podstawie wartosci pol fitness
+*/
 bool Gamer::betterThan(Gamer compare)
 {
 	return (this->fitness > compare.fitness);
@@ -82,12 +111,13 @@ Gamer& Gamer::operator =(const Gamer& g)
 	return *this;
 }
 
-bool Gamer::operator < (const Gamer& compare) const
+bool Gamer::operator <(const Gamer& compare) const
 {
 	return(this->fitness < compare.fitness);
 }
 
-// pomocnicza metoda
+// pomocnicze metody
+
 void Gamer::display()
 {
 	for (int i = 0; i < choices.size(); ++i)

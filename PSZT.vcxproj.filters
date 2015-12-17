@@ -15,21 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BestShape.cpp">
+    <ClCompile Include="RandomNumberGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RandomNumberGenerator.cpp">
+    <ClCompile Include="Gamer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PythonExport.cpp">
+    <ClCompile Include="GeneticAlgorithm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrisonersDilemma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\BestShape.h">
+    <ClInclude Include="RandomNumberGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\RandomNumberGenerator.h">
+    <ClInclude Include="Gamer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrisonersDilemma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

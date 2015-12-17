@@ -9,18 +9,15 @@
 #define PARNUM 20
 #define POPNUM 30
 #define RATIOCROSS 0.8
-#define RATIOMUT 0.001
-#define COMPETNUM 150
-#define ITERNUM 200000
+#define RATIOMUT 0.01
+#define ITERNUM 20000
 
 class PrisonersDilemma
 {
 public:
 	PrisonersDilemma();
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb);
-	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, int comnumb);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC);
-	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC, int comnumb);
 	std::string solve();
 private:
 	void initialize();
@@ -35,7 +32,6 @@ private:
 
 	int populationNumber;		// liczba potomkow
 	int parentsNumber;			// liczba rodzicow
-	int competNumber;			// liczba gier pomiedzy dwoma strategrami w fazie 'turnieju'
 	std::bitset<6> history;		// historia wprowadzana przez uzytkownika
 	std::vector<Gamer> population;
 	std::vector<Gamer> parents;

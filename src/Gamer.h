@@ -16,12 +16,14 @@ public:
 	void display();
 	void displayFitness();
 	void compete(Gamer opponent, unsigned long hist);
+	void normalizeFitness(int opponentsNumber);
 	bool betterThan(Gamer compare);
 	Gamer& operator =(const Gamer& g);
 	bool operator < (const Gamer& compare) const;
 private:
 	std::bitset<64> choices;
 	int fitness;
+	double normalizedFitness;
 };
 
 #endif
