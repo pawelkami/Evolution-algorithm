@@ -2,35 +2,40 @@
 
 PrisonersDilemma::PrisonersDilemma()
 	: history(RandomNumberGenerator::getInstance().randBitset6()), parentsNumber(PARNUM), 
-	populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(COMPETNUM)
+	populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(COMPETNUM), 
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	initialize();
 }
 
 PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb)
 	: history(hist), parentsNumber(parnumb), populationNumber(popnumb), 
-	ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(COMPETNUM)
+	ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(COMPETNUM), 
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	initialize();
 }
 
 PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, int comnumb)
 	: history(hist), parentsNumber(parnumb), populationNumber(popnumb),
-	ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(comnumb)
+	ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), competNumber(comnumb), 
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	initialize();
 }
 
 PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC) 
 	: history(hist), parentsNumber(parnumb), populationNumber(popnumb), 
-	ratioCrossing(rC), ratioMutate(rM), competNumber(COMPETNUM)
+	ratioCrossing(rC), ratioMutate(rM), competNumber(COMPETNUM), 
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	initialize();
 }
 
 PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC, int comnumb)
 	: history(hist), parentsNumber(parnumb), populationNumber(popnumb),
-	ratioCrossing(rC), ratioMutate(rM), competNumber(comnumb)
+	ratioCrossing(rC), ratioMutate(rM), competNumber(comnumb), 
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	initialize();
 }
@@ -54,8 +59,9 @@ std::string PrisonersDilemma::solve()
 
 Gamer PrisonersDilemma::geneticAlgorithm()
 {
-	//initialize(); // juz w konstruktorze
 	compete();
+
+	Gamer best = pickBest();
 
 	while (!stopCondition())
 	{
@@ -64,24 +70,40 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 		crossing();
 		mutate();
 		compete();
+		best = pickBest();
 	}
-
-	Gamer best = pickBest();
 
 	return best;
 }
 
 bool PrisonersDilemma::stopCondition()
 {
-	bool result = false;
+	return (actualIteration++ < iterationNumber);
+}
 
-	//...
+void PrisonersDilemma::selection()
+{
+	parents.clear();
 
-	return result;
+	for (int i = 0; i < parentsNumber; ++i)
+	{
+		int bestIter = 0;
+
+		for (int j = 0; j < populationNumber; ++j)
+		{
+			if (population[j].betterThan(population[bestIter]))
+				bestIter = j;
+		}
+
+		parents.push_back(population[bestIter]);
+		population.erase(population.begin() + bestIter);
+	}
 }
 
 void PrisonersDilemma::pickToCross()
 {
+	toCross.clear();
+
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
 		bool goToNext = false;
@@ -89,14 +111,14 @@ void PrisonersDilemma::pickToCross()
 		for (int j = 0; goToNext == false; j = (j + 1) % parentsNumber)
 		{
 			double draw = RandomNumberGenerator::getInstance().randFrom0To1();
-			
+
 			if (draw < ratioCrossing)
 			{
 				for (int k = (j + 1) % parentsNumber; ; k = (k + 1) % parentsNumber)
 				{
 					if (k == j) continue;
 					draw = RandomNumberGenerator::getInstance().randFrom0To1();
-					
+
 					if (draw < ratioCrossing)
 					{
 						toCross.push_back(std::make_pair(parents[j], parents[k]));
@@ -111,6 +133,11 @@ void PrisonersDilemma::pickToCross()
 
 void PrisonersDilemma::crossing()
 {
+	population.clear();
+
+	for (int i = 0; i < populationNumber; ++i)
+		population.push_back(Gamer());
+
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
 		int draw = RandomNumberGenerator::getInstance().randFrom0ToN(64);
@@ -137,19 +164,24 @@ void PrisonersDilemma::mutate()
 
 void PrisonersDilemma::compete()
 {
-	//...
-}
+	unsigned long hist = history.to_ulong();
 
-void PrisonersDilemma::selection()
-{
-	//...
+	for (int i = 0; i < populationNumber; ++i)
+	{
+		for (int j = i; j < populationNumber; ++j)
+			population[i].compete(population[j], hist);
+	}
 }
 
 Gamer PrisonersDilemma::pickBest()
 {
-	Gamer best;
-	
-	//...
-	
+	Gamer best = population[0];
+
+	for (int i = 1; i < populationNumber; ++i)
+	{
+		if (population[i].betterThan(best)) 
+			best = population[i];
+	}
+
 	return best;
 }

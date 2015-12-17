@@ -14,8 +14,11 @@ public:
 	void setBit(int i);
 	void resetBit(int i);
 	void display();
+	void compete(Gamer opponent, unsigned long hist);
+	bool betterThan(Gamer compare);
 private:
 	std::bitset<64> choices;
+	int fitness;
 };
 
 #endif

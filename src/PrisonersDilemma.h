@@ -10,6 +10,7 @@
 #define RATIOCROSS 0.2
 #define RATIOMUT 0.2
 #define COMPETNUM 150
+#define ITERNUM 200
 
 class PrisonersDilemma
 {
@@ -40,6 +41,8 @@ private:
 	std::vector<std::pair<Gamer, Gamer>> toCross;
 	double ratioMutate;
 	double ratioCrossing;
+	int iterationNumber;		// liczba iteracji w algorytmie
+	int actualIteration;		// numer aktualnej iteracji
 };
 
 #endif
