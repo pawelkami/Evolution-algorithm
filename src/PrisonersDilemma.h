@@ -16,6 +16,7 @@ class PrisonersDilemma
 {
 public:
 	PrisonersDilemma();
+	PrisonersDilemma(std::string hist);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC);
 	std::string solve();
@@ -29,6 +30,7 @@ private:
 	void selection();
 	Gamer pickBest();
 	Gamer geneticAlgorithm();
+	void setHistoryFromString(std::string hist);
 
 	int populationNumber;		// liczba potomkow
 	int parentsNumber;			// liczba rodzicow

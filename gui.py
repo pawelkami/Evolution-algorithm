@@ -58,8 +58,12 @@ class MainWindow(tk.Frame):
     # function which solves problem with evolutionary algorithm
     def solve(self):
         print evolution.getName()
+        history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
+        pd = evolution.PrisonersDilemma(history)
+        res = pd.solve()
+        print res
         #drawing plot
-        self.drawPlot(11,2)
+        #self.drawPlot(11,2)
 
     # method which sets scale value to friction
     def onScale(self, val):
@@ -68,14 +72,12 @@ class MainWindow(tk.Frame):
 
     # method which creates spinbox
     def makeSpinbox(parent, caption, width, x, y, **options):
-        #Label(parent, text=caption).pack('''anchor=tk.NW, padx=10, pady=10''')
         Label(parent, text=caption).place(x=x,y=y)
         Label(parent, text=caption).place(x=x,y=y)
 
         spinbox = tk.Spinbox(parent, **options)
         if width:
             spinbox.config(width=width)
-        #spinbox.pack(anchor=tk.S, side=side,padx=10, pady=10)
         spinbox.place(x=x, y=y+20)
         return spinbox
 

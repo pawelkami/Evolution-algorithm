@@ -1,4 +1,5 @@
 #include <boost/python.hpp>
+#include "PrisonersDilemma.h"
 
 std::string getName()
 {
@@ -7,5 +8,10 @@ std::string getName()
 
 BOOST_PYTHON_MODULE(evolution)
 {
-	boost::python::def("getName", getName);
+	using namespace boost::python;
+	def("getName", getName);
+
+	class_<PrisonersDilemma>("PrisonersDilemma", init<std::string>(args("hist"), "__init__ docstring"))
+		.def("solve", &PrisonersDilemma::solve)
+		;
 }
