@@ -10,7 +10,7 @@ void Gamer::mutate(double ratio)
 	for (int i = 0; i < choices.size(); ++i)
 	{
 		double draw = RandomNumberGenerator::getInstance().randFrom0To1();
-
+		
 		if (draw < ratio)
 			choices[i] = !choices[i];
 	}
@@ -43,4 +43,5 @@ void Gamer::display()
 	{
 		std::cout << choices[i];
 	}
+	std::cout << std::endl;
 }

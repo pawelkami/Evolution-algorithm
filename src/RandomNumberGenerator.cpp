@@ -65,15 +65,13 @@ double RandomNumberGenerator::getFromNormalDistribution()
 double RandomNumberGenerator::randFrom0To1()
 {
 	static std::random_device rd;
-	unsigned int draw = rd();
-	return draw / rd.max();
+	return (double)rd() / rd.max();
 }
 
 int RandomNumberGenerator::randFrom0ToN(int n)
 {
 	static std::random_device rd;
-	unsigned int draw = rd();
-	return draw % n;
+	return rd() % n;
 }
 
 unsigned long RandomNumberGenerator::rand64()

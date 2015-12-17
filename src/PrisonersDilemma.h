@@ -20,13 +20,15 @@ public:
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC, int comnumb);
 	std::string solve();
-private:
+public:
 	void initialize();
 	bool stopCondition();
 	void pickToCross();
 	void crossing();
 	void mutate();
 	void compete();
+	void selection();
+	Gamer pickBest();
 	Gamer geneticAlgorithm();
 
 	int populationNumber;		// liczba potomkow

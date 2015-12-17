@@ -54,9 +54,19 @@ std::string PrisonersDilemma::solve()
 
 Gamer PrisonersDilemma::geneticAlgorithm()
 {
-	Gamer best;
+	//initialize(); // juz w konstruktorze
+	compete();
 
-	//...
+	while (!stopCondition())
+	{
+		selection();
+		pickToCross();
+		crossing();
+		mutate();
+		compete();
+	}
+
+	Gamer best = pickBest();
 
 	return best;
 }
@@ -74,19 +84,25 @@ void PrisonersDilemma::pickToCross()
 {
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
-		for (int j = 0; j < parentsNumber; j = (j + 1) % parentsNumber)
-		{
-			int draw = RandomNumberGenerator::getInstance().randFrom0To1();
+		bool goToNext = false;
 
+		for (int j = 0; goToNext == false; j = (j + 1) % parentsNumber)
+		{
+			double draw = RandomNumberGenerator::getInstance().randFrom0To1();
+			
 			if (draw < ratioCrossing)
 			{
-				for (int k = (j + 1) % parentsNumber; k < parentsNumber; k = (k + 1) % parentsNumber)
+				for (int k = (j + 1) % parentsNumber; ; k = (k + 1) % parentsNumber)
 				{
-					if (k == i) continue;
+					if (k == j) continue;
 					draw = RandomNumberGenerator::getInstance().randFrom0To1();
-
-					if (draw < ratioCrossing) 
+					
+					if (draw < ratioCrossing)
+					{
 						toCross.push_back(std::make_pair(parents[j], parents[k]));
+						goToNext = true;
+						break;
+					}
 				}
 			}
 		}
@@ -95,8 +111,6 @@ void PrisonersDilemma::pickToCross()
 
 void PrisonersDilemma::crossing()
 {
-	pickToCross();
-
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
 		int draw = RandomNumberGenerator::getInstance().randFrom0ToN(64);
@@ -124,4 +138,18 @@ void PrisonersDilemma::mutate()
 void PrisonersDilemma::compete()
 {
 	//...
+}
+
+void PrisonersDilemma::selection()
+{
+	//...
+}
+
+Gamer PrisonersDilemma::pickBest()
+{
+	Gamer best;
+	
+	//...
+	
+	return best;
 }
