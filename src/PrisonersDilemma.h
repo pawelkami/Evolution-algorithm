@@ -4,13 +4,14 @@
 #include "RandomNumberGenerator.h"
 #include "Gamer.h"
 #include <vector>
+#include <algorithm>
 
 #define PARNUM 20
 #define POPNUM 30
-#define RATIOCROSS 0.2
-#define RATIOMUT 0.2
+#define RATIOCROSS 0.8
+#define RATIOMUT 0.001
 #define COMPETNUM 150
-#define ITERNUM 1000
+#define ITERNUM 200000
 
 class PrisonersDilemma
 {

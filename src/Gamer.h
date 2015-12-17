@@ -18,6 +18,7 @@ public:
 	void compete(Gamer opponent, unsigned long hist);
 	bool betterThan(Gamer compare);
 	Gamer& operator =(const Gamer& g);
+	bool operator < (const Gamer& compare) const;
 private:
 	std::bitset<64> choices;
 	int fitness;

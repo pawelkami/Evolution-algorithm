@@ -10,9 +10,9 @@ RandomNumberGenerator::RandomNumberGenerator() { }
 
 void RandomNumberGenerator::init() 
 {
-	a = time(NULL);
-	b = time(NULL);
-	c = time(NULL);
+	a = (double)time(NULL);
+	b = (double)time(NULL);
+	c = (double)time(NULL);
 }
 
 double RandomNumberGenerator::getFromUniformDistribution() 

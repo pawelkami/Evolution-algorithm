@@ -117,6 +117,8 @@ void PrisonersDilemma::pickToCross()
 {
 	toCross.clear();
 
+	std::sort(parents.begin(), parents.end());
+
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
 		bool goToNext = false;
@@ -127,7 +129,7 @@ void PrisonersDilemma::pickToCross()
 
 			if (draw < ratioCrossing)
 			{
-				for (int k = (j + 1) % parentsNumber; ; k = (k + 1) % parentsNumber)
+				for (int k = 0; ; k = (k + 1) % parentsNumber)
 				{
 					if (k == j) continue;
 					draw = RandomNumberGenerator::getInstance().randFrom0To1();
@@ -153,7 +155,7 @@ void PrisonersDilemma::pickToCross()
 
 			if (draw < ratioCrossing)
 			{
-				for (int k = (j + 1) % parentsNumber; ; k = (k + 1) % parentsNumber)
+				for (int k = 0; ; k = (k + 1) % parentsNumber)
 				{
 					if (k == j) continue;
 					draw = RandomNumberGenerator::getInstance().randFrom0To1();

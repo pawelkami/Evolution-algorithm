@@ -82,6 +82,11 @@ Gamer& Gamer::operator =(const Gamer& g)
 	return *this;
 }
 
+bool Gamer::operator < (const Gamer& compare) const
+{
+	return(this->fitness < compare.fitness);
+}
+
 // pomocnicza metoda
 void Gamer::display()
 {
