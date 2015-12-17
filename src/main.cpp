@@ -1,8 +1,15 @@
-#include <iostream>
+#include "Gamer.h"
+#include "PrisonersDilemma.h"
+#include "RandomNumberGenerator.h"
 
-using namespace std;
-
-int main(int argc, char** argv)
+int main()
 {
+	PrisonersDilemma pris;
+
+	std::string best = pris.solve();
+	std::cout << best << std::endl;
+
+	getchar();
+
 	return 0;
 }

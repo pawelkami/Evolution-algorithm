@@ -75,6 +75,13 @@ bool Gamer::betterThan(Gamer compare)
 	return (this->fitness > compare.fitness);
 }
 
+Gamer& Gamer::operator =(const Gamer& g)
+{
+	this->choices = g.choices;
+	this->fitness = g.fitness;
+	return *this;
+}
+
 // pomocnicza metoda
 void Gamer::display()
 {
@@ -83,4 +90,9 @@ void Gamer::display()
 		std::cout << choices[i];
 	}
 	std::cout << std::endl;
+}
+
+void Gamer::displayFitness()
+{
+	std::cout << fitness << std::endl;
 }

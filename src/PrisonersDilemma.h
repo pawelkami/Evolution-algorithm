@@ -6,11 +6,11 @@
 #include <vector>
 
 #define PARNUM 20
-#define POPNUM 10
+#define POPNUM 30
 #define RATIOCROSS 0.2
 #define RATIOMUT 0.2
 #define COMPETNUM 150
-#define ITERNUM 200
+#define ITERNUM 1000
 
 class PrisonersDilemma
 {

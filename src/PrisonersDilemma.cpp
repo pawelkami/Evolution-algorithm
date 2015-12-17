@@ -59,8 +59,9 @@ std::string PrisonersDilemma::solve()
 
 Gamer PrisonersDilemma::geneticAlgorithm()
 {
-	compete();
+	std::vector<Gamer> bests;
 
+	compete();
 	Gamer best = pickBest();
 
 	while (!stopCondition())
@@ -70,15 +71,27 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 		crossing();
 		mutate();
 		compete();
+
 		best = pickBest();
+		bests.push_back(best);
 	}
 
+	Gamer highest = bests[0];
+	for (int i = 1; i < iterationNumber; ++i)
+	{
+		if (bests[i].betterThan(highest))
+			highest = bests[i];
+	}
+	std::cout << "highest: ";
+	highest.displayFitness();
+	std::cout << "\nbest(from algorithm): ";
+	best.displayFitness();
 	return best;
 }
 
 bool PrisonersDilemma::stopCondition()
 {
-	return (actualIteration++ < iterationNumber);
+	return (actualIteration++ >= iterationNumber);
 }
 
 void PrisonersDilemma::selection()
@@ -89,7 +102,7 @@ void PrisonersDilemma::selection()
 	{
 		int bestIter = 0;
 
-		for (int j = 0; j < populationNumber; ++j)
+		for (int j = 0; j < populationNumber - i; ++j)
 		{
 			if (population[j].betterThan(population[bestIter]))
 				bestIter = j;
@@ -105,6 +118,32 @@ void PrisonersDilemma::pickToCross()
 	toCross.clear();
 
 	for (int i = 0; i < populationNumber >> 1; ++i)
+	{
+		bool goToNext = false;
+
+		for (int j = 0; goToNext == false; j = (j + 1) % parentsNumber)
+		{
+			double draw = RandomNumberGenerator::getInstance().randFrom0To1();
+
+			if (draw < ratioCrossing)
+			{
+				for (int k = (j + 1) % parentsNumber; ; k = (k + 1) % parentsNumber)
+				{
+					if (k == j) continue;
+					draw = RandomNumberGenerator::getInstance().randFrom0To1();
+
+					if (draw < ratioCrossing)
+					{
+						toCross.push_back(std::make_pair(parents[j], parents[k]));
+						goToNext = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (populationNumber % 2 == 1)
 	{
 		bool goToNext = false;
 
@@ -179,7 +218,7 @@ Gamer PrisonersDilemma::pickBest()
 
 	for (int i = 1; i < populationNumber; ++i)
 	{
-		if (population[i].betterThan(best)) 
+		if (population[i].betterThan(best))
 			best = population[i];
 	}
 
