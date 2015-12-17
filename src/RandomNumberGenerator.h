@@ -13,6 +13,8 @@ public:
 	void init();
 	double getFromUniformDistribution();
 	double getFromNormalDistribution();
+	double randFrom0To1();
+	int randFrom0ToN(int n);
 	static unsigned long rand64();
 	static unsigned long rand63plus1();
 	static unsigned long randBit();
