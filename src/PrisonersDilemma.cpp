@@ -96,7 +96,7 @@ bool PrisonersDilemma::stopCondition()
 void PrisonersDilemma::selection()
 {
 	parents.clear();
-
+	/*
 	for (int i = 0; i < parentsNumber; ++i)
 	{
 		int bestIter = 0;
@@ -109,6 +109,28 @@ void PrisonersDilemma::selection()
 
 		parents.push_back(population[bestIter]);
 		population.erase(population.begin() + bestIter);
+	}
+	*/
+
+	// metoda kola ruletki
+
+	std::sort(population.begin(), population.end());
+
+	for (int i = 0; i < parentsNumber; ++i)
+	{
+		double draw = RandomNumberGenerator::getInstance().randFrom0To1();
+		double sumNormFitn = 0.0;
+
+		for (int j = 0; j < populationNumber; ++j)
+		{
+			sumNormFitn += population[j].getNormalFitness();
+
+			if (sumNormFitn >= draw)
+			{
+				parents.push_back(population[j]);
+				break;
+			}
+		}
 	}
 }
 
@@ -234,13 +256,16 @@ void PrisonersDilemma::mutate()
 */
 void PrisonersDilemma::compete()
 {
-	unsigned long hist = history.to_ulong();
+	//unsigned long hist = history.to_ulong();
 
 	for (int i = 0; i < populationNumber; ++i)
 	{
-		for (int j = i; j < populationNumber; ++j)
-			population[i].compete(population[j], hist);
+		for (int j = i+1; j < populationNumber; ++j)
+			population[i].compete(population[j]);
 	}
+
+	for (int i = 0; i < populationNumber; ++i)
+		population[i].normalizeFitness(populationNumber);
 }
 
 /*
