@@ -18,6 +18,7 @@ public:
 	void compete(Gamer opponent);
 	void normalizeFitness(int opponentsNumber);
 	double getNormalFitness();
+	int getFitness();
 	bool betterThan(Gamer compare);
 	Gamer& operator =(const Gamer& g);
 	bool operator <(const Gamer& compare) const;

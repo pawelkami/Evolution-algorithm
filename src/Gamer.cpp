@@ -94,7 +94,7 @@ void Gamer::normalizeFitness(int opponentsNumber)
 {
 	int max = 5 * (opponentsNumber - 1) * 64;
 
-	normalizedFitness = fitness / max;
+	normalizedFitness = (double)fitness / max;
 }
 
 /*
@@ -103,6 +103,14 @@ void Gamer::normalizeFitness(int opponentsNumber)
 double Gamer::getNormalFitness()
 {
 	return normalizedFitness;
+}
+
+/*
+	Metoda zwraca wartosc pola fitness
+*/
+int Gamer::getFitness()
+{
+	return fitness;
 }
 
 /*

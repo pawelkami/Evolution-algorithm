@@ -1,19 +1,10 @@
 #include "PrisonersDilemma.h"
-#include <assert.h>
 
 PrisonersDilemma::PrisonersDilemma()
 	: history(RandomNumberGenerator::getInstance().randBitset6()), parentsNumber(PARNUM), 
 	populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), 
 	iterationNumber(ITERNUM), actualIteration(0)
 {
-	initialize();
-}
-
-PrisonersDilemma::PrisonersDilemma(std::string hist) 
-	: parentsNumber(PARNUM), populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT),
-	iterationNumber(ITERNUM), actualIteration(0)
-{
-	setHistoryFromString(hist);
 	initialize();
 }
 
@@ -71,9 +62,10 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 		crossing();
 		mutate();
 		compete();
-
+		//---------------------
 		best = pickBest();
 		bests.push_back(best);
+		fitnesses.push_back(best.getFitness());
 	}
 
 	Gamer highest = bests[0];
@@ -84,21 +76,19 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 	}
 	std::cout << "highest: ";
 	highest.displayFitness();
-	std::cout << "\nbest(from algorithm): ";
+	std::cout << "best(from algorithm): ";
 	best.displayFitness();
-	return best;
-}
+	std::cout << std::endl;
 
-void PrisonersDilemma::setHistoryFromString(std::string hist)
-{
-	assert(hist.size() == 6);
-	for (int i = 0; i < hist.size(); ++i)
-	{
-		if (hist[i] == '1')
-			history.set(i);
-		else if (hist[i] == '0')
-			history.reset(i);
-	}
+	best.compete(highest);
+	best.normalizeFitness(2);
+	highest.normalizeFitness(2);
+	std::cout << "Highest normalizedFitness: ";
+	std::cout << highest.getNormalFitness() << std::endl;
+	std::cout << "best(from algorithm): ";
+	std::cout << best.getNormalFitness() << std::endl;
+
+	return best;
 }
 
 /*
@@ -303,4 +293,12 @@ Gamer PrisonersDilemma::pickBest()
 	}
 
 	return best;
+}
+
+/*
+	Metoda zwraca tablice wartosci funkcji przystosowania najlepszych osobnikow z kazdej iteracji
+*/
+std::vector<int> PrisonersDilemma::getFitnesses()
+{
+	return fitnesses;
 }

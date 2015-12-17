@@ -16,10 +16,10 @@ class PrisonersDilemma
 {
 public:
 	PrisonersDilemma();
-	PrisonersDilemma(std::string hist);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb);
 	PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC);
 	std::string solve();
+	std::vector<int> getFitnesses();
 private:
 	void initialize();
 	bool stopCondition();
@@ -30,7 +30,6 @@ private:
 	void selection();
 	Gamer pickBest();
 	Gamer geneticAlgorithm();
-	void setHistoryFromString(std::string hist);
 
 	int populationNumber;		// liczba potomkow
 	int parentsNumber;			// liczba rodzicow
@@ -38,6 +37,7 @@ private:
 	std::vector<Gamer> population;
 	std::vector<Gamer> parents;
 	std::vector<std::pair<Gamer, Gamer>> toCross;
+	std::vector<int> fitnesses;
 	double ratioMutate;
 	double ratioCrossing;
 	int iterationNumber;		// liczba iteracji w algorytmie
