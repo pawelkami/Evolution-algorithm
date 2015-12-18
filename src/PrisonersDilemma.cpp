@@ -254,7 +254,7 @@ void PrisonersDilemma::mutate()
 void PrisonersDilemma::compete()
 {
 	reset();
-
+	/*
 	for (int i = 0; i < populationNumber; ++i)
 	{
 		for (int j = i+1; j < populationNumber; ++j)
@@ -263,6 +263,20 @@ void PrisonersDilemma::compete()
 
 	for (int i = 0; i < populationNumber; ++i)
 		population[i].normalizeFitness(populationNumber);
+
+	*/
+	temp.clear();
+	temp.insert(temp.begin(), population.begin(), population.end());
+	temp.insert(temp.end(), parents.begin(), parents.end());
+
+	for (int i = 0; i < populationNumber + parentsNumber; ++i)
+	{
+		for (int j = i + 1; j < populationNumber + parentsNumber; ++j)
+			temp[i].compete(population[j]);
+	}
+
+	for (int i = 0; i < populationNumber + parentsNumber; ++i)
+		temp[i].normalizeFitness(populationNumber + parentsNumber);
 }
 
 /*
@@ -294,11 +308,6 @@ Metoda z nowo powstalej wstepnej populacji tuz po mutowaniu oraz z rodzicow twor
 */
 void PrisonersDilemma::makeNewPopulation()
 {
-	std::vector<Gamer> temp;
-
-	temp.insert(temp.begin(), population.begin(), population.end());
-	temp.insert(temp.end(), parents.begin(), parents.end());
-
 	std::sort(temp.begin(), temp.end());
 
 	population.clear();

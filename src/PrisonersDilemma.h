@@ -42,6 +42,7 @@ private:
 	std::vector<Gamer> parents;
 	std::vector<std::pair<Gamer, Gamer>> toCross;
 	std::vector<int> fitnesses;
+	std::vector<Gamer> temp;
 	double ratioMutate;
 	double ratioCrossing;
 	int iterationNumber;		// liczba iteracji w algorytmie
