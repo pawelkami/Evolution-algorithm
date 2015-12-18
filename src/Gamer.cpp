@@ -63,11 +63,8 @@ void Gamer::resetBit(int i)
 	10 - player 1 gets 5 points, player 2 gets 0 points
 	11 - both players get 1 point
 */
-void Gamer::compete(Gamer opponent)
+void Gamer::compete(Gamer& opponent)
 {
-	this->fitness = 0.0;
-	opponent.fitness = 0.0;
-
 	for (int i = 0; i < 64; ++i)
 	{
 		int code = ((this->choices[i] << 1) + (opponent.choices[i]));
@@ -96,8 +93,16 @@ void Gamer::compete(Gamer opponent)
 void Gamer::normalizeFitness(int opponentsNumber)
 {
 	int max = 5 * (opponentsNumber - 1) * 64;
+	normalizedFitness = ((double)fitness / (double)max);
+}
 
-	normalizedFitness = (double)fitness / max;
+/*
+	Metoda ma na celu wyzerowanie fitnessa i znormalizowanego fitnesa dla pojedynczej strategii
+*/
+void Gamer::resetFitness()
+{
+	fitness = 0;
+	normalizedFitness = 0.0;
 }
 
 /*
@@ -119,7 +124,7 @@ int Gamer::getFitness()
 /*
 	Metoda porownuje dwie strategie na podstawie wartosci pol fitness
 */
-bool Gamer::betterThan(Gamer compare)
+bool Gamer::betterThan(Gamer& compare)
 {
 	return (this->fitness > compare.fitness);
 }
