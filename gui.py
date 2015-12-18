@@ -13,13 +13,18 @@ class MainWindow(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
+        # first player moves
         self.x0 = tk.StringVar(self)
         self.x1 = tk.StringVar(self)
         self.x2 = tk.StringVar(self)
-		
+
+        # second player moves
         self.y0 = tk.StringVar(self)
         self.y1 = tk.StringVar(self)
         self.y2 = tk.StringVar(self)
+
+        # number of iterations of genetic algorithm
+        self.iterationNumber = tk.StringVar(self)
 
         self.initUI()
 
@@ -33,7 +38,7 @@ class MainWindow(tk.Frame):
         # Spinboxes for coordinates
         Label(self, text="Ruchy pierwszego gracza:").place(x=10,y=10)
         Label(self, text="Ruchy drugiego gracza:").place(x=200, y=10)
-		
+
         self.makeSpinbox("Pierwszy:", 10, 10, 30, increment=1, textvariable=self.x0, values=(0,1))
         self.makeSpinbox("Pierwszy:", 10, 200, 30, increment=1, textvariable=self.y0, values=(0,1))
         self.makeSpinbox("Drugi:", 10, 10, 90, increment=1, textvariable=self.x1, values=(0,1))
@@ -42,12 +47,14 @@ class MainWindow(tk.Frame):
         self.makeSpinbox("Trzeci:", 10, 200, 150, increment=1, textvariable=self.y2, values=(0,1))
         Label(self, text="0 - brak współpracy").place(x=10,y=200)
         Label(self, text="1 - współpraca").place(x=10, y=220)
+        self.makeSpinbox("Liczba iteracji algorytmu:", 10, 200, 200, increment=1, from_=0, to= 1000000, textvariable=self.iterationNumber)
         self.x0.set(0)
         self.x1.set(0)
         self.x2.set(0)
         self.y0.set(0)
         self.y1.set(0)
         self.y2.set(0)
+        self.iterationNumber.set(2000)
 
         # solve button
         button = tk.Button(self, text ="Oblicz", command = self.solve).place(x=110, y= 260)
@@ -59,7 +66,7 @@ class MainWindow(tk.Frame):
     # function which solves problem with evolutionary algorithm
     def solve(self):
         history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
-        pd = evolution.PrisonersDilemma(history)
+        pd = evolution.PrisonersDilemma(history, int(self.iterationNumber.get()))
 
         # solving problem
         self.beginWaitCursor()

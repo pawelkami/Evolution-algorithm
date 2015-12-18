@@ -6,7 +6,7 @@ BOOST_PYTHON_MODULE(evolution)
 {
 	using namespace boost::python;
 
-	class_<PrisonersDilemma>("PrisonersDilemma", init<std::string>(args("hist"), "__init__ docstring"))
+	class_<PrisonersDilemma>("PrisonersDilemma", init<std::string, int>(args("hist", "iterationNumber"), "__init__ docstring"))
 		.def("solve", &PrisonersDilemma::solve)
 		.def("getFitnesses", &PrisonersDilemma::getFitnesses)
 		;
