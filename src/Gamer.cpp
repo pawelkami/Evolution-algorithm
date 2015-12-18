@@ -65,6 +65,9 @@ void Gamer::resetBit(int i)
 */
 void Gamer::compete(Gamer opponent)
 {
+	this->fitness = 0.0;
+	opponent.fitness = 0.0;
+
 	for (int i = 0; i < 64; ++i)
 	{
 		int code = ((this->choices[i] << 1) + (opponent.choices[i]));
@@ -150,5 +153,5 @@ void Gamer::display()
 
 void Gamer::displayFitness()
 {
-	std::cout << fitness << std::endl;
+	std::cout << fitness;
 }

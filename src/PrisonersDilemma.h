@@ -9,8 +9,8 @@
 #define PARNUM 20
 #define POPNUM 30
 #define RATIOCROSS 0.8
-#define RATIOMUT 0.01
-#define ITERNUM 2000
+#define RATIOMUT 0.001
+#define ITERNUM 1
 
 class PrisonersDilemma
 {

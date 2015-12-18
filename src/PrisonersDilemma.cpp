@@ -86,8 +86,10 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 	}
 	std::cout << "highest: ";
 	highest.displayFitness();
+	std::cout << std::endl;
 	std::cout << "best(from algorithm): ";
 	best.displayFitness();
+	std::cout << std::endl;
 	std::cout << std::endl;
 
 	best.compete(highest);
@@ -148,6 +150,20 @@ void PrisonersDilemma::selection()
 			}
 		}
 	}
+
+	std::cout << std::endl << "--------------------------------SELECTION--------------------------------" << std::endl;
+	for (int i = 0; i < population.size(); ++i)
+	{
+		population[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+	for (int i = 0; i < parents.size(); ++i)
+	{
+		parents[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << "-------------------------------------------------------------------------" << std::endl;
 }
 
 /*
@@ -157,6 +173,7 @@ void PrisonersDilemma::selection()
 */
 void PrisonersDilemma::pickToCross()
 {
+	std::cout << "-------------------------------PICK TO CROSS----------------------------" << std::endl;
 	toCross.clear();
 
 	std::sort(parents.begin(), parents.end());
@@ -212,6 +229,23 @@ void PrisonersDilemma::pickToCross()
 			}
 		}
 	}
+
+	for (int i = 0; i < parents.size(); ++i)
+	{
+		parents[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+
+	for (int i = 0; i < toCross.size(); ++i)
+	{
+		toCross[i].first.displayFitness();
+		std::cout << " ";
+		toCross[i].second.displayFitness();
+		std::cout << " | ";
+	}
+	std::cout << std::endl;
+	std::cout << "-------------------------------------------------------------------------" << std::endl;
 }
 
 /*
@@ -253,6 +287,18 @@ void PrisonersDilemma::crossing()
 			toCross[i].second.getBit(j) == 0 ? population[i].resetBit(j) : population[i].setBit(j);
 	}
 
+	std::cout << "--------------------------------CROSSING--------------------------------" << std::endl;
+	for (int i = 0; i < toCross.size(); ++(++i))
+	{
+		toCross[i >> 1].first.display();
+		toCross[i >> 1].second.display();
+		std::cout << std::endl;
+		population[i].display();
+		population[i + 1].display();
+		std::cout << "---------------------------------------" << std::endl;
+	}
+	std::cout << "------------------------------------------------------------------------" << std::endl;
+
 	toCross.clear();
 }
 
@@ -272,8 +318,6 @@ void PrisonersDilemma::mutate()
 */
 void PrisonersDilemma::compete()
 {
-	//unsigned long hist = history.to_ulong();
-
 	for (int i = 0; i < populationNumber; ++i)
 	{
 		for (int j = i+1; j < populationNumber; ++j)
@@ -313,14 +357,51 @@ Metoda z nowo powstalej wstepnej populacji tuz po mutowaniu oraz z rodzicow twor
 */
 void PrisonersDilemma::makeNewPopulation()
 {
+	std::cout << "--------------------------------MAKE NEW POPULATION--------------------------------" << std::endl;
+	for (int i = 0; i < population.size(); ++i)
+	{
+		population[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+
+	for (int i = 0; i < parents.size(); ++i)
+	{
+		parents[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+
 	std::vector<Gamer> temp;
 
 	temp.insert(temp.begin(), population.begin(), population.end());
 	temp.insert(temp.end(), parents.begin(), parents.end());
 
+	for (int i = 0; i < temp.size(); ++i)
+	{
+		temp[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+
 	std::sort(temp.begin(), temp.end());
+
+	for (int i = 0; i < temp.size(); ++i)
+	{
+		temp[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
 
 	population.clear();
 
 	population.insert(population.begin(), temp.begin(), temp.begin() + populationNumber);
+
+	for (int i = 0; i < population.size(); ++i)
+	{
+		population[i].displayFitness();
+		std::cout << " ";
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "-----------------------------------------------------------------------------------" << std::endl;
 }
