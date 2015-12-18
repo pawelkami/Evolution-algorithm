@@ -322,4 +322,7 @@ void PrisonersDilemma::reset()
 {
 	for (int i = 0; i < populationNumber; ++i)
 		population[i].resetFitness();
+
+	for (int i = 0; i < parentsNumber; ++i)
+		parents[i].resetFitness();
 }
