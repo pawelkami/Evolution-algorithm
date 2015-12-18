@@ -6,6 +6,7 @@ from numpy import *
 import Tkinter as tk
 from matplotlib.pyplot import *
 import evolution
+import tkMessageBox
 
 # class representing main window in application
 class MainWindow(tk.Frame):
@@ -57,23 +58,30 @@ class MainWindow(tk.Frame):
 
     # function which solves problem with evolutionary algorithm
     def solve(self):
-        print evolution.getName()
         history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
         pd = evolution.PrisonersDilemma(history)
-        self.beginWaitCursor()
-        res = pd.solve()
-        self.endWaitCursor()
-        print res
-        #drawing plot
-        #self.drawPlot(11,2)
 
+        # solving problem
+        self.beginWaitCursor()
+        result = pd.solve()
+        self.endWaitCursor()
+
+        tkMessageBox.showinfo("Wynik", result)
+        fitnesses = pd.getFitnesses()
+
+        #drawing plot
+        self.drawPlot(fitnesses)
+
+    # method which begins mouse waiting cursor
     def beginWaitCursor(self):
         self.parent.config(cursor="wait")
         self.parent.update()
 
+    # method which stops 'waiting' mouse cursor
     def endWaitCursor(self):
         self.parent.config(cursor="")
         self.parent.update()
+
     # method which creates spinbox
     def makeSpinbox(parent, caption, width, x, y, **options):
         Label(parent, text=caption).place(x=x,y=y)
@@ -86,27 +94,20 @@ class MainWindow(tk.Frame):
         return spinbox
 
     # function which draws plot of the shape of tool
-    def drawPlot(self, a0, a1):
-        # coordinates
-        x0 = float(self.x0.get())
-        x1 = float(self.x1.get())
-        y0 = float(self.y0.get())
-        y1 = float(self.y1.get())
-
+    def drawPlot(self, fitnesses ):
         # x plot
-        x = linspace(x0, x1, 200)
+        x = range(0, size(fitnesses))
 
         # function which will be drawn
-        y = (y1 + (y0 - y1)/(x0 - y1))*(x-x1) + (x-x0)*(x-x1)*(a0+a1*x)
+        y = fitnesses
         figure()
         plot(x, y)
         grid(True)
         savefig("plot.png")
-        xlabel(r"Wspolrzedna x")
-        ylabel(r"Wspolrzedna y")
-        title(r"Ksztalt narzedzia")
+        xlabel(r"Iteracja")
+        ylabel(r"Fitness")
+        title(r"Optymalne fitnessy przy kolejnych iteracjach")
         show()
-        self.closeWindow()
 
 def main():
     root = tk.Tk()
