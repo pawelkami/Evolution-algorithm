@@ -71,6 +71,7 @@ Gamer PrisonersDilemma::geneticAlgorithm()
 		crossing();
 		mutate();
 		compete();
+		makeNewPopulation();
 		//---------------------
 		best = pickBest();
 		bests.push_back(best);
@@ -123,28 +124,11 @@ bool PrisonersDilemma::stopCondition()
 
 /*
 	Metoda odpowiedzialna za selekcje osobnikow z populacji do vectora rodzicow
-	Wypelnia vector rodzicow najlepszymi osobnikami ze wzgledu na wspolczynnik fitness
+	metoda kola ruletki
 */
 void PrisonersDilemma::selection()
 {
 	parents.clear();
-	/*
-	for (int i = 0; i < parentsNumber; ++i)
-	{
-		int bestIter = 0;
-
-		for (int j = 0; j < populationNumber - i; ++j)
-		{
-			if (population[j].betterThan(population[bestIter]))
-				bestIter = j;
-		}
-
-		parents.push_back(population[bestIter]);
-		population.erase(population.begin() + bestIter);
-	}
-	*/
-
-	// metoda kola ruletki
 
 	std::sort(population.begin(), population.end());
 
@@ -322,4 +306,21 @@ Gamer PrisonersDilemma::pickBest()
 std::vector<int> PrisonersDilemma::getFitnesses()
 {
 	return fitnesses;
+}
+
+/*
+Metoda z nowo powstalej wstepnej populacji tuz po mutowaniu oraz z rodzicow tworzy nowa populacje najlepszych
+*/
+void PrisonersDilemma::makeNewPopulation()
+{
+	std::vector<Gamer> temp;
+
+	temp.insert(temp.begin(), population.begin(), population.end());
+	temp.insert(temp.end(), parents.begin(), parents.end());
+
+	std::sort(temp.begin(), temp.end());
+
+	population.clear();
+
+	population.insert(population.begin(), temp.begin(), temp.begin() + populationNumber);
 }

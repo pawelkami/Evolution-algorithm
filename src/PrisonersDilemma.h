@@ -32,6 +32,7 @@ private:
 	Gamer pickBest();
 	Gamer geneticAlgorithm();
 	void setHistoryFromString(const std::string& hist);
+	void makeNewPopulation();
 
 	int populationNumber;		// liczba potomkow
 	int parentsNumber;			// liczba rodzicow
