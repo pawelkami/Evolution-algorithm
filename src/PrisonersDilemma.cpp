@@ -9,7 +9,9 @@ PrisonersDilemma::PrisonersDilemma()
 	initialize();
 }
 
-PrisonersDilemma::PrisonersDilemma(std::string hist)
+PrisonersDilemma::PrisonersDilemma(std::string hist) 
+	: parentsNumber(PARNUM), populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT),
+	iterationNumber(ITERNUM), actualIteration(0)
 {
 	setHistoryFromString(hist);
 	initialize();
