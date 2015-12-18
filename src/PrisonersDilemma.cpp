@@ -272,7 +272,7 @@ void PrisonersDilemma::compete()
 	for (int i = 0; i < populationNumber + parentsNumber; ++i)
 	{
 		for (int j = i + 1; j < populationNumber + parentsNumber; ++j)
-			temp[i].compete(population[j]);
+			temp[i].compete(temp[j]);
 	}
 
 	for (int i = 0; i < populationNumber + parentsNumber; ++i)
