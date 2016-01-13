@@ -67,7 +67,7 @@ class MainWindow(tk.Frame):
     def solve(self):
         history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
         pd = evolution.PrisonersDilemma(history, int(self.iterationNumber.get()))
-
+        #pd.init(history, int(self.iterationNumber.get()))
         # solving problem
         self.beginWaitCursor()
         result = pd.solve()

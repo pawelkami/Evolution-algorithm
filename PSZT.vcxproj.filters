@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Gamer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\PrisonersDilemma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,15 +24,18 @@
     <ClCompile Include="src\RandomNumberGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Prisoner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Gamer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\PrisonersDilemma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\RandomNumberGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Prisoner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

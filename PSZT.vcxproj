@@ -94,6 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Boost</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,6 +119,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Boost</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,13 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Gamer.cpp" />
+    <ClCompile Include="src\Prisoner.cpp" />
     <ClCompile Include="src\PrisonersDilemma.cpp" />
     <ClCompile Include="src\PythonExport.cpp" />
     <ClCompile Include="src\RandomNumberGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Gamer.h" />
+    <ClInclude Include="src\Prisoner.h" />
     <ClInclude Include="src\PrisonersDilemma.h" />
     <ClInclude Include="src\RandomNumberGenerator.h" />
   </ItemGroup>

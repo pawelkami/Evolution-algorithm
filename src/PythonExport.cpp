@@ -2,6 +2,8 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "PrisonersDilemma.h"
 
+
+
 BOOST_PYTHON_MODULE(evolution)
 {
 	using namespace boost::python;
@@ -11,7 +13,7 @@ BOOST_PYTHON_MODULE(evolution)
 		.def("getFitnesses", &PrisonersDilemma::getFitnesses)
 		;
 
-	class_< std::vector<int> >("Fitnesses")
-		.def(vector_indexing_suite< std::vector<int> >())
+	class_< std::vector<double> >("Fitnesses")
+		.def(vector_indexing_suite< std::vector<double> >())
 		;
 }

@@ -6,9 +6,12 @@
 #include <bitset>
 #include <random>
 
-class RandomNumberGenerator 
+class RandomNumberGenerator
 {
 public:
+	~RandomNumberGenerator();
+	RandomNumberGenerator(const RandomNumberGenerator& randomNumberGenerator) = delete;
+	void operator= (const RandomNumberGenerator& randomNumberGenerator) = delete;
 	static RandomNumberGenerator& getInstance();
 	void init();
 	double getFromUniformDistribution();
@@ -24,7 +27,6 @@ public:
 	static std::bitset<6> randBitset6();
 private:
 	double a, b, c;
-	static RandomNumberGenerator* instance;
 	RandomNumberGenerator();
 };
 

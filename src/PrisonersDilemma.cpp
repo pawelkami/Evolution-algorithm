@@ -1,196 +1,141 @@
 #include "PrisonersDilemma.h"
 
+
+
 PrisonersDilemma::PrisonersDilemma()
-	: history(RandomNumberGenerator::getInstance().randBitset6()), parentsNumber(PARNUM), 
-	populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), 
-	iterationNumber(ITERNUM), actualIteration(0)
 {
-	initialize();
 }
 
-PrisonersDilemma::PrisonersDilemma(std::string hist, int iternum) 
-	: parentsNumber(PARNUM), populationNumber(POPNUM), ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT),
-	iterationNumber(iternum), actualIteration(0)
+
+PrisonersDilemma::~PrisonersDilemma()
 {
-	setHistoryFromString(hist);
-	initialize();
 }
 
-PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb)
-	: history(hist), parentsNumber(parnumb), populationNumber(popnumb), 
-	ratioCrossing(RATIOCROSS), ratioMutate(RATIOMUT), iterationNumber(ITERNUM), actualIteration(0)
+PrisonersDilemma::PrisonersDilemma(std::string history, int iternum)
 {
-	initialize();
+	init(history, iternum);
 }
 
-PrisonersDilemma::PrisonersDilemma(std::bitset<6> hist, int popnumb, int parnumb, double rM, double rC) 
-	: history(hist), parentsNumber(parnumb), populationNumber(popnumb), 
-	ratioCrossing(rC), ratioMutate(rM), iterationNumber(ITERNUM), actualIteration(0)
+
+bool PrisonersDilemma::compareFunction(const Prisoner& prisoner1, const Prisoner& prisoner2)
 {
-	initialize();
+	return prisoner1 > prisoner2;
 }
 
-/*
-	Metoda inicjuje vectory rodzicow i populacji
-*/
-void PrisonersDilemma::initialize()
-{
-	for (int i = 0; i < parentsNumber; ++i)
-		parents.push_back(Gamer());
 
-	for (int i = 0; i < populationNumber; ++i)
-		population.push_back(Gamer());
+void PrisonersDilemma::init(std::string hist, int iternum, int popnumber, double rM, double rC)
+{
+	history = std::bitset<6>(hist);
+	iterationNumber = iternum;
+	currentIteration = 0;
+	populationNumber = popnumber;
+	ratioMutate = rM;
+	ratioCrossing = rC;
+
+	population.clear();
+	parents.clear();
+	toCross.clear();
+
+	for (unsigned idx = 0; idx < populationNumber; ++idx)
+		population.push_back(Prisoner(history));
 }
 
-/*
-	Jedyna metoda publiczna, ktora wywoluje algorytm genetyczny i zwraca najlepsza strategie w postaci string'a
-*/
-std::string PrisonersDilemma::solve()
+
+void PrisonersDilemma::resetPopulationFitness()
 {
-	Gamer best = geneticAlgorithm();
-	std::string result = best.toString();
-	
-	return result;
+	for (int idx = 0; idx < populationNumber; ++idx)
+		population[idx].resetFitness();
 }
 
-/*
-	Metoda symulujaca wlasciwy algorytm genetyczny, rozwiazujacy dylemat wieznia
-*/
-Gamer PrisonersDilemma::geneticAlgorithm()
+
+bool PrisonersDilemma::working()
 {
-	std::vector<Gamer> bests;
+	return (currentIteration++ < iterationNumber);
+}
 
-	compete();
-	Gamer best = pickBest();
 
-	while (!stopCondition())
+void PrisonersDilemma::populationCompete()
+{
+	resetPopulationFitness();
+
+	for (int i_idx = 0; i_idx < populationNumber; ++i_idx)
 	{
-		selection();
-		pickToCross();
-		crossing();
-		mutate();
-		compete();
-		makeNewPopulation();
-		//---------------------
-		best = pickBest();
-		bests.push_back(best);
-		fitnesses.push_back(best.getFitness());
+		for (int j_idx = i_idx + 1; j_idx < populationNumber; ++j_idx)
+		{
+			population[i_idx].compete(population[j_idx]);
+
+			population[i_idx].setHistory(history);
+			population[j_idx].setHistory(history);
+		}
 	}
 
-	Gamer highest = bests[0];
-	for (int i = 1; i < iterationNumber; ++i)
-	{
-		if (bests[i].betterThan(highest))
-			highest = bests[i];
-	}
+	long totalScore = 0;
+	for (int idx = 0; idx < populationNumber; ++idx)
+		totalScore += population[idx].getFitness();
 
-	return best;
+	for (int idx = 0; idx < populationNumber; ++idx)
+		population[idx].normalizeFitness(totalScore);
 }
 
-void PrisonersDilemma::setHistoryFromString(const std::string & hist)
-{
-	assert(hist.size() == 6);
-	for (unsigned int i = 0; i < hist.size(); ++i)
-	{
-		if (hist[i] == '1')
-			history.set(i);
-		else if (hist[i] == '0')
-			history.reset(i);
-	}
-}
 
 /*
-	Metoda odpowiedzialna za konczenie dzialania algorytmu
-	Jest w najprostszej postaci, czyli konczy algorytm po zadanej liczbie iteracji
+Metoda odpowiedzialna za selekcje osobnikow z populacji do vectora rodzicow
+metoda kola ruletki
 */
-bool PrisonersDilemma::stopCondition()
-{
-	return (actualIteration++ >= iterationNumber);
-}
-
-/*
-	Metoda odpowiedzialna za selekcje osobnikow z populacji do vectora rodzicow
-	metoda kola ruletki
-*/
-void PrisonersDilemma::selection()
+void PrisonersDilemma::parentsSelection()
 {
 	parents.clear();
 
-	std::sort(population.begin(), population.end());
+	std::sort(population.begin(), population.end(), compareFunction);
 
-	for (int i = 0; i < parentsNumber; ++i)
+	for (int i_idx = 0; i_idx < populationNumber; ++i_idx)
 	{
 		double draw = RandomNumberGenerator::getInstance().randFrom0To1();
 		double sumNormFitn = 0.0;
 
-		for (int j = 0; j < populationNumber; ++j)
+		for (int j_idx = 0; j_idx < populationNumber; ++j_idx)
 		{
-			sumNormFitn += population[j].getNormalFitness();
+			sumNormFitn += population[j_idx].getNormalizedFitness();
 
 			if (sumNormFitn >= draw)
 			{
-				parents.push_back(population[j]);
+				parents.push_back(population[j_idx]);
 				break;
 			}
 		}
 	}
 }
 
+
 /*
-	Metoda paruje rodzicow i zapisuje pary w pomocniczym vektorze
-	liczba par jest polowa liczby potomkow, bo z kazdej pary bedzie
-	powstawac para potomkow w wyniku krzyzowania pary rodzicow
+Metoda paruje rodzicow i zapisuje pary w pomocniczym vektorze
+liczba par jest polowa liczby potomkow, bo z kazdej pary bedzie
+powstawac para potomkow w wyniku krzyzowania pary rodzicow
 */
-void PrisonersDilemma::pickToCross()
+void PrisonersDilemma::pickPairsToCross()
 {
 	toCross.clear();
 
-	std::sort(parents.begin(), parents.end());
+	std::sort(parents.begin(), parents.end(), compareFunction);
 
-	for (int i = 0; i < populationNumber >> 1; ++i)
+	for (int i_idx = 0; i_idx < ((populationNumber >> 1) + (populationNumber % 2)); ++i_idx)
 	{
 		bool goToNext = false;
 
-		for (int j = 0; goToNext == false; j = (j + 1) % parentsNumber)
+		for (int j_idx = 0; goToNext == false; j_idx = (j_idx + 1) % populationNumber)
 		{
 			double draw = RandomNumberGenerator::getInstance().randFrom0To1();
 
 			if (draw < ratioCrossing)
 			{
-				for (int k = 0; ; k = (k + 1) % parentsNumber)
+				for (int k_idx = 0; ; k_idx = (k_idx + 1) % populationNumber)
 				{
-					if (k == j) continue;
+					if (k_idx == j_idx) continue;
 					draw = RandomNumberGenerator::getInstance().randFrom0To1();
 
 					if (draw < ratioCrossing)
 					{
-						toCross.push_back(std::make_pair(parents[j], parents[k]));
-						goToNext = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	if (populationNumber % 2 == 1)
-	{
-		bool goToNext = false;
-
-		for (int j = 0; goToNext == false; j = (j + 1) % parentsNumber)
-		{
-			double draw = RandomNumberGenerator::getInstance().randFrom0To1();
-
-			if (draw < ratioCrossing)
-			{
-				for (int k = 0; ; k = (k + 1) % parentsNumber)
-				{
-					if (k == j) continue;
-					draw = RandomNumberGenerator::getInstance().randFrom0To1();
-
-					if (draw < ratioCrossing)
-					{
-						toCross.push_back(std::make_pair(parents[j], parents[k]));
+						toCross.push_back(std::make_pair(parents[j_idx], parents[k_idx]));
 						goToNext = true;
 						break;
 					}
@@ -200,12 +145,13 @@ void PrisonersDilemma::pickToCross()
 	}
 }
 
+
 /*
-	Metoda odpowiedzialna za krzyzowanie par rodzicow wczesniej wybranych i
-	zapisanych w pomocniczym vektorze toCross, w ten sposob zostaje 
-	wygenerowana nowa populacja
+Metoda odpowiedzialna za krzyzowanie par rodzicow wczesniej wybranych i
+zapisanych w pomocniczym vektorze toCross, w ten sposob zostaje
+wygenerowana nowa populacja
 */
-void PrisonersDilemma::crossing()
+void PrisonersDilemma::parentsCrossing()
 {
 	for (int i = 0; i < populationNumber >> 1; ++i)
 	{
@@ -213,116 +159,76 @@ void PrisonersDilemma::crossing()
 
 		for (int j = 0; j < draw; ++j)
 		{
-			toCross[i].first.getBit(j) == 0 ? population[i].resetBit(j) : population[i].setBit(j);
-			toCross[i].second.getBit(j) == 0 ? population[populationNumber - 1 - i].resetBit(j) : population[populationNumber - 1 - i].setBit(j);
+			toCross[i].first.getStrategyBit(j) == 0 ? population[i].resetStrategyBit(j) : population[i].setStrategyBit(j);
+			toCross[i].second.getStrategyBit(j) == 0 ? population[populationNumber - 1 - i].resetStrategyBit(j) : population[populationNumber - 1 - i].setStrategyBit(j);
 		}
 		for (int j = draw; j < 64; ++j)
 		{
-			toCross[i].second.getBit(j) == 0 ? population[i].resetBit(j) : population[i].setBit(j);
-			toCross[i].first.getBit(j) == 0 ? population[populationNumber - 1 - i].resetBit(j) : population[populationNumber - 1 - i].setBit(j);
+			toCross[i].second.getStrategyBit(j) == 0 ? population[i].resetStrategyBit(j) : population[i].setStrategyBit(j);
+			toCross[i].first.getStrategyBit(j) == 0 ? population[populationNumber - 1 - i].resetStrategyBit(j) : population[populationNumber - 1 - i].setStrategyBit(j);
 		}
 	}
 
 	if (populationNumber % 2 == 1)
 	{
-		int i = (populationNumber >> 1) + 1;
+		int i = (populationNumber >> 1);
 		int draw = RandomNumberGenerator::getInstance().randFrom0ToN(64);
 
 		for (int j = 0; j < draw; ++j)
-			toCross[i].first.getBit(j) == 0 ? population[i].resetBit(j) : population[i].setBit(j);
+			toCross[i].first.getStrategyBit(j) == 0 ? population[i].resetStrategyBit(j) : population[i].setStrategyBit(j);
 		for (int j = draw; j < 64; ++j)
-			toCross[i].second.getBit(j) == 0 ? population[i].resetBit(j) : population[i].setBit(j);
+			toCross[i].second.getStrategyBit(j) == 0 ? population[i].resetStrategyBit(j) : population[i].setStrategyBit(j);
 	}
 
 	toCross.clear();
 }
 
-/*
-	Metoda, ktorej celem jest mutacja kazdego osobnika z populacji
-	(realizacja przez wywolanie metody klasy Gamer dla kazdego osobnika)
-*/
-void PrisonersDilemma::mutate()
+
+double PrisonersDilemma::getPopulationFitness()
+{
+	long max = 3 * BATTLES_NMB * (populationNumber - 1) * populationNumber;
+
+	long sum = 0;
+	for (int idx = 0; idx < populationNumber; ++idx)
+		sum += population[idx].getFitness();
+
+	double popFitness = (double)sum / (double)max;
+	return popFitness;
+}
+
+
+void PrisonersDilemma::newGenerationMutate()
 {
 	for (int i = 0; i < populationNumber; ++i)
 		population[i].mutate(ratioMutate);
 }
 
-/*
-	Metoda, ktora kazde dwa osobniki z populacji ze soba porownuje i wylicza dla nich fitness
-	(realizacja przez wywolanie metody klasy Gamer dla kazdego osobnika)
-*/
-void PrisonersDilemma::compete()
+
+Prisoner PrisonersDilemma::geneticAlgorithm()
 {
-	reset();
-	/*
-	for (int i = 0; i < populationNumber; ++i)
+
+	while (working())
 	{
-		for (int j = i+1; j < populationNumber; ++j)
-			population[i].compete(population[j]);
+		populationCompete();
+		parentsSelection();
+		pickPairsToCross();
+		parentsCrossing();
+		newGenerationMutate();
+		populationFitnesses.push_back(getPopulationFitness());
 	}
 
-	for (int i = 0; i < populationNumber; ++i)
-		population[i].normalizeFitness(populationNumber);
-
-	*/
-	temp.clear();
-	temp.insert(temp.begin(), population.begin(), population.end());
-	temp.insert(temp.end(), parents.begin(), parents.end());
-
-	for (int i = 0; i < populationNumber + parentsNumber; ++i)
-	{
-		for (int j = i + 1; j < populationNumber + parentsNumber; ++j)
-			temp[i].compete(temp[j]);
-	}
-
-	for (int i = 0; i < populationNumber + parentsNumber; ++i)
-		temp[i].normalizeFitness(populationNumber + parentsNumber);
+	return population[0];
 }
 
-/*
-	Metoda wybiera najlepszego osobnika z populacji
-*/
-Gamer PrisonersDilemma::pickBest()
+
+std::string PrisonersDilemma::solve()
 {
-	Gamer best = population[0];
-
-	for (int i = 1; i < populationNumber; ++i)
-	{
-		if (population[i].betterThan(best))
-			best = population[i];
-	}
-
-	return best;
+	Prisoner winner = geneticAlgorithm();
+	return winner.toString();
 }
 
-/*
-	Metoda zwraca tablice wartosci funkcji przystosowania najlepszych osobnikow z kazdej iteracji
-*/
-std::vector<int> PrisonersDilemma::getFitnesses()
+std::vector<double> PrisonersDilemma::getFitnesses()
 {
-	return fitnesses;
+	return populationFitnesses;
 }
 
-/*
-Metoda z nowo powstalej wstepnej populacji tuz po mutowaniu oraz z rodzicow tworzy nowa populacje najlepszych
-*/
-void PrisonersDilemma::makeNewPopulation()
-{
-	std::sort(temp.begin(), temp.end());
-
-	population.clear();
-
-	population.insert(population.begin(), temp.begin(), temp.begin() + populationNumber);
-}
-
-/*
-	Metoda zeruje dotychczasowo wyliczone wartosci funkcji przystosowania dla kazdego osobnika populacji
-*/
-void PrisonersDilemma::reset()
-{
-	for (int i = 0; i < populationNumber; ++i)
-		population[i].resetFitness();
-
-	for (int i = 0; i < parentsNumber; ++i)
-		parents[i].resetFitness();
-}
