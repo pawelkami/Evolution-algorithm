@@ -67,12 +67,18 @@ class MainWindow(tk.Frame):
     def solve(self):
         history = str(self.x0.get() + self.y0.get() + self.x1.get() + self.y1.get() + self.x2.get() + self.y2.get())
         pd = evolution.PrisonersDilemma(history, int(self.iterationNumber.get()))
-        #pd.init(history, int(self.iterationNumber.get()))
+
         # solving problem
         self.beginWaitCursor()
         result = pd.solve()
         self.endWaitCursor()
 
+        result = "Strategia: %s\n\n" \
+		         "WSP z ALLD przed: %s\n\n" \
+		         "WSP z ALLC przed: %s\n\n" \
+		         "WSP z ALLD po: %s\n\n" \
+		         "WSP z ALLC po: %s\n\n" % (result, result, result, result, result)
+				 
         tkMessageBox.showinfo("Wynik", result)
         fitnesses = pd.getFitnesses()
 
@@ -121,6 +127,7 @@ def main():
     mw = MainWindow(root)
     root.geometry("340x300")
     root.resizable(width=tk.FALSE, height=tk.FALSE)
+    root.iconbitmap('panda.ico')
     root.mainloop()
 
 if __name__ == '__main__':
