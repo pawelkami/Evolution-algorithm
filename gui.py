@@ -80,6 +80,7 @@ class MainWindow(tk.Frame):
 		         "WSP z ALLD przed: %s\n\n" \
 		         "WSP z ALLC po: %s\n\n" \
 		         "WSP z ALLD po: %s\n\n" % (result, coeffs[0], coeffs[1], coeffs[2], coeffs[3])
+
 				 
         tkMessageBox.showinfo("Wynik", result)
         fitnesses = pd.getFitnesses()
