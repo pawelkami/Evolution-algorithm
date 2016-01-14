@@ -8,3 +8,7 @@
 ./Debug
 ./Release
 *.pyd
+*.exp
+*.iobj
+*.pdb
+*.suo
