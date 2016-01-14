@@ -206,16 +206,84 @@ void PrisonersDilemma::newGenerationMutate()
 
 Prisoner PrisonersDilemma::geneticAlgorithm()
 {
+	int _populationNumber;
+	std::vector<Prisoner> _population;
 
+	_populationNumber = populationNumber;
+	_population = population;
+
+	for (int i = 0; i < _populationNumber; ++i)
+	{
+		population.push_back(Prisoner(history, 0));
+	}
+	populationNumber *= 2;
+	populationCompete();
+	double befAllCFitness = getPopulationFitness();
+	coeff.push_back(befAllCFitness);
+
+	population = _population;
+	populationNumber = _populationNumber;
+
+	for (int i = 0; i < _populationNumber; ++i)
+	{
+		population.push_back(Prisoner(history, 1));
+	}
+	populationNumber *= 2;
+	populationCompete();
+	double befAllDFitness = getPopulationFitness();
+	coeff.push_back(befAllDFitness);
+
+	population = _population;
+	populationNumber = _populationNumber;
+
+	int idx = 0;
+	double sum = 0;
 	while (working())
 	{
 		populationCompete();
+		sum += getPopulationFitness();
+		++idx;
+		if (idx == (iterationNumber/100))
+		{
+			double avgFitness = sum / (iterationNumber/100);
+			populationFitnesses.push_back(avgFitness);
+			idx = 0;
+			sum = 0;
+		}
 		parentsSelection();
 		pickPairsToCross();
 		parentsCrossing();
 		newGenerationMutate();
-		populationFitnesses.push_back(getPopulationFitness());
 	}
+
+	_populationNumber = populationNumber;
+	_population = population;
+
+	for (int i = 0; i < _populationNumber; ++i)
+	{
+		population.push_back(Prisoner(history, 0));
+	}
+	populationNumber *= 2;
+	populationCompete();
+	double aftAllCFitness = getPopulationFitness();
+	coeff.push_back(aftAllCFitness);
+
+	population = _population;
+	populationNumber = _populationNumber;
+
+	for (int i = 0; i < _populationNumber; ++i)
+	{
+		population.push_back(Prisoner(history, 1));
+	}
+	populationNumber *= 2;
+	populationCompete();
+	double aftAllDFitness = getPopulationFitness();
+	coeff.push_back(aftAllDFitness);
+
+	population = _population;
+	populationNumber = _populationNumber;
+
+	std::sort(population.begin(), population.end(), compareFunction);
 
 	return population[0];
 }
@@ -230,5 +298,11 @@ std::string PrisonersDilemma::solve()
 std::vector<double> PrisonersDilemma::getFitnesses()
 {
 	return populationFitnesses;
+}
+
+
+std::vector<double> PrisonersDilemma::getCoeffs()
+{
+	return coeff;
 }
 

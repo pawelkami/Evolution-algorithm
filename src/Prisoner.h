@@ -10,7 +10,7 @@
 class Prisoner
 {
 public:
-	Prisoner(std::bitset<6> hist);
+	Prisoner(std::bitset<6> hist, int flag = -1);
 	Prisoner();
 	~Prisoner();
 

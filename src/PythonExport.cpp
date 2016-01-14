@@ -11,6 +11,7 @@ BOOST_PYTHON_MODULE(evolution)
 	class_<PrisonersDilemma>("PrisonersDilemma", init<std::string, int>(args("hist", "iterationNumber"), "__init__ docstring"))
 		.def("solve", &PrisonersDilemma::solve)
 		.def("getFitnesses", &PrisonersDilemma::getFitnesses)
+		.def("getCoeff", &PrisonersDilemma::getCoeffs)
 		;
 
 	class_< std::vector<double> >("Fitnesses")

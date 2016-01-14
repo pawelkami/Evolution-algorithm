@@ -2,8 +2,12 @@
 
 
 
-Prisoner::Prisoner(std::bitset<6> hist): strategy(RandomNumberGenerator::getInstance().randBitset64()), history(hist), fitness(0), normalizedFitness(0.0)
+Prisoner::Prisoner(std::bitset<6> hist, int flag): strategy(RandomNumberGenerator::getInstance().randBitset64()), history(hist), fitness(0), normalizedFitness(0.0)
 {
+	if (flag == 1)
+		strategy = RandomNumberGenerator::getInstance().allDBitset64();
+	if (flag == 0)
+		strategy = RandomNumberGenerator::getInstance().allCBitset64();
 }
 
 

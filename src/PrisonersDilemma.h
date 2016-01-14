@@ -18,6 +18,7 @@ public:
 
 	std::string solve();
 	std::vector<double> getFitnesses();
+	std::vector<double> getCoeffs();
 private:
 	PrisonersDilemma();
 
@@ -32,6 +33,7 @@ private:
 	std::vector<Prisoner> parents;
 	std::vector<std::pair<Prisoner, Prisoner> > toCross;
 	std::vector<double> populationFitnesses;
+	std::vector<double> coeff;
 
 	Prisoner geneticAlgorithm();
 	bool working();

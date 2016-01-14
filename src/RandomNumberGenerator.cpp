@@ -152,3 +152,25 @@ std::bitset<6> RandomNumberGenerator::randBitset6()
 		bits[i] = randBit();
 	return std::move(bits);
 }
+
+
+std::bitset<64> RandomNumberGenerator::allCBitset64()
+{
+	std::bitset<64> bits;
+	for (auto i = 0; i < 64; ++i)
+	{
+		bits.reset(i);
+	}
+	return bits;
+}
+
+
+std::bitset<64> RandomNumberGenerator::allDBitset64()
+{
+	std::bitset<64> bits;
+	for (auto i = 0; i < 64; ++i)
+	{
+		bits.set(i);
+	}
+	return bits;
+}

@@ -25,6 +25,8 @@ public:
 	static unsigned long randn(unsigned int n);
 	static std::bitset<64> randBitset64();
 	static std::bitset<6> randBitset6();
+	static std::bitset<64> allCBitset64();
+	static std::bitset<64> allDBitset64();
 private:
 	double a, b, c;
 	RandomNumberGenerator();
