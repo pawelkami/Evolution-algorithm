@@ -18,15 +18,15 @@ public:
 	double getFromNormalDistribution();
 	double randFrom0To1();
 	int randFrom0ToN(int n);
-	static unsigned long rand64();
-	static unsigned long rand63plus1();
-	static unsigned long randBit();
-	static unsigned long randBinN(unsigned int n, double p);
-	static unsigned long randn(unsigned int n);
-	static std::bitset<64> randBitset64();
-	static std::bitset<6> randBitset6();
-	static std::bitset<64> allCBitset64();
-	static std::bitset<64> allDBitset64();
+	unsigned long rand64();
+	unsigned long rand63plus1();
+	unsigned long randBit();
+	unsigned long randBinN(unsigned int n, double p);
+	unsigned long randn(unsigned int n);
+	std::bitset<64> randBitset64();
+	std::bitset<6> randBitset6();
+	std::bitset<64> allCBitset64();
+	std::bitset<64> allDBitset64();
 private:
 	double a, b, c;
 	RandomNumberGenerator();
